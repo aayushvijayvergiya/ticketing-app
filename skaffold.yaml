@@ -1,0 +1,70 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - './infra/k8s/*'
+build:
+  local:
+    push: false
+  # googleCloudBuild:
+  #   projectId: ticketing-dev-2309
+  artifacts:
+    - image: aayushvijayvergiya/ticketing-app-auth-image
+    # - image: us.gcr.io/ticketing-dev-2309/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: aayushvijayvergiya/ticketing-app-clients-image
+    # - image: us.gcr.io/ticketing-dev-2309/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+    - image: aayushvijayvergiya/ticketing-app-tickets-image
+    # - image: us.gcr.io/ticketing-dev-2309/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: aayushvijayvergiya/ticketing-app-orders-image
+    # - image: us.gcr.io/ticketing-dev-2309/tickets
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: aayushvijayvergiya/ticketing-app-expiration-image
+    # - image: us.gcr.io/ticketing-dev-2309/tickets
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: aayushvijayvergiya/ticketing-app-payments-image
+    # - image: us.gcr.io/ticketing-dev-2309/tickets
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+            
+            
+
+  

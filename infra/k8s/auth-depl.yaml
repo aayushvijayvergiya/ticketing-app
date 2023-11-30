@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - name: auth
+        image: aayushvijayvergiya/ticketing-app-auth-image
+        # image: us.gcr.io/ticketing-dev-2309/auth
+        env:
+          - name: MONGO_URI
+            value: 'mongodb://auth-mongo-srv:27017'
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: jwtKey
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+  - port: 4001
+    targetPort: 4001
+    name: auth
+    protocol: TCP
