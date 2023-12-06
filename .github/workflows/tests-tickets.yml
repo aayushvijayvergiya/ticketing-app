@@ -3,7 +3,7 @@ name: Tests-Tickets
 on:
   pull_request:
     paths:
-      - 'auth/**'
+      - 'tickets/**'
   #   branches: [ "master" ]
 
 jobs:
