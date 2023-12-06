@@ -3,7 +3,7 @@ name: Tests-Payments
 on:
   pull_request:
     paths:
-      - 'auth/**'
+      - 'payments/**'
   #   branches: [ "master" ]
 
 jobs:
