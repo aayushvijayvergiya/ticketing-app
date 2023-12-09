@@ -1,0 +1,28 @@
+name: Deploy Payments
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'payments/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build the Docker image
+      uses: actions/checkout@v3
+    - run: cd payments && docker build -t aayushvijayvergiya/ticketing-app-payments-image .
+    - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - run: docker push aayushvijayvergiya/ticketing-app-payments-image
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    - run: doctl kubernetes cluster kubeconfig save d3cec954-8594-404d-a7e4-3e41b2a890f4
+    - run: kubectl rollout restart deployment payments-depl
+        
